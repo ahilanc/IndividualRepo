@@ -1,5 +1,5 @@
 @web @DemoTest
-Feature: Demo Bank site
+Feature: Demo Bank site - to fetch all data from excel and execute the test for records
 
   Scenario Outline: To validate whether user see the successful transaction message and reference number generated
     Given User login into Demo Bank site
@@ -13,7 +13,7 @@ Feature: Demo Bank site
     And user enter authentication code as <AuthorizationCode> and click validate button
     Then User see success message and reference no will be generated
 
-    Examples: 
+    Examples:
     | rowQuery | AuthorizationCode |
     | rowQuery1| 123456 		   |
     | rowQuery2| 123456 		   |
