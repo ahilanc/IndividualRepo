@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Courgette-JVM Report</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Plugin CSS -->
+    <link href="css/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/core.min.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <li class="navbar-brand" href="#">Courgette-JVM Report</li>
+</nav>
+
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <!-- Result Cards -->
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 mb-3">
+                <div class="card text-white bg-primary o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fa fa-fw"></i>
+                        </div>
+                        <div class="mr-10">
+                            Total Scenarios
+                        </div>
+                    </div>
+                    <div class="card-footer text-white clearfix small z-1" style="cursor: pointer;"
+                         onclick="setSearch('');">
+                        <span class="float-left text-white" id="card-total">5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-3">
+                <div class="card text-white bg-success o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fa fa-fw"></i>
+                        </div>
+                        <div class="mr-10">
+                            Passed Scenarios
+                        </div>
+                    </div>
+                    <div class="card-footer text-white clearfix small z-1" style="cursor: pointer;"
+                         onclick="setSearch('Passed');">
+                        <span class="float-left text-white" id="card-passed">5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-3">
+                <div class="card text-white bg-danger o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fa fa-fw"></i>
+                        </div>
+                        <div class="mr-10">
+                            Failed Scenarios
+                        </div>
+                    </div>
+                    <div class="card-footer text-white clearfix small z-1" style="cursor: pointer;"
+                         onclick="setSearch('Failed');">
+                        <span class="float-left text-white" id="card-failed">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-3">
+                <div class="card text-white bg-warning o-hidden h-100">
+                    <div class="card-body">
+                        <div class="card-body-icon">
+                            <i class="fa fa-fw"></i>
+                        </div>
+                        <div class="mr-10">
+                            Re-run Scenarios
+                        </div>
+                    </div>
+                    <div class="card-footer text-white clearfix small z-1" style="cursor: pointer;"
+                    onclick="setSearch('Rerun');">
+                        <span class="float-left" id="card-rerun">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa"></i>Run Information
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                Timestamp:
+                            </div>
+                            <div>2020-10-10T17:25:45.921Z</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Duration:
+                            </div>
+                            <div>4 min, 8 sec</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Parallel Threads:
+                            </div>
+                            <div>1</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Parallel Run Level:
+                            </div>
+                            <div>Scenario</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Rerun Failed:
+                            </div>
+                            <div>false</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Cucumber Tags:
+                            </div>
+                            <div>@web, @DemoTest</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                Cucumber Features:
+                            </div>
+                            <div>src/test/resources/features</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="mt-3 mb-3">
+                        <canvas id="pieChart" width="100%" height="321"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Table -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                Results
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th width="95%">Scenario Name</th>
+                            <th>Result</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#0441bdeb-afa4-4a27-965a-ca179e7347e5">To validate whether user see the successful transaction message and reference number generated</a>
+                                    </td>
+                                    <td>
+                                        <span class="float-left badge badge-success">Passed</span>
+                                    </td>
+                                </tr>
+<tr>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#fd1321e0-fc04-4e80-9656-50fc2cb9f5d8">To validate whether user see the successful transaction message and reference number generated</a>
+                                    </td>
+                                    <td>
+                                        <span class="float-left badge badge-success">Passed</span>
+                                    </td>
+                                </tr>
+<tr>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#ee389908-5b57-498d-a9f0-2a2393818ba0">To validate whether user see the successful transaction message and reference number generated</a>
+                                    </td>
+                                    <td>
+                                        <span class="float-left badge badge-success">Passed</span>
+                                    </td>
+                                </tr>
+<tr>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#70292a30-fe22-4952-9033-a905c8f596e0">To validate whether user see the successful transaction message and reference number generated</a>
+                                    </td>
+                                    <td>
+                                        <span class="float-left badge badge-success">Passed</span>
+                                    </td>
+                                </tr>
+<tr>
+                                    <td>
+                                        <a href="" data-toggle="modal" data-target="#4ae41385-5808-43fb-821d-7574df75fe9e">To validate whether user see the successful transaction message and reference number generated</a>
+                                    </td>
+                                    <td>
+                                        <span class="float-left badge badge-success">Passed</span>
+                                    </td>
+                                </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Modals -->
+    <div class="modal fade" id="0441bdeb-afa4-4a27-965a-ca179e7347e5" tabindex="-1" role="dialog" aria-labelledby="0441bdeb-afa4-4a27-965a-ca179e7347e5" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header text-white bg-dark">
+<span class="modal-title"><h5>To validate whether user see the successful transaction message and reference number generated</h5>
+<div class="font-italic text-muted">DemoBank.feature - line 19</div></span>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.beforeScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">16 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Given User login into Demo Bank site
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">2201 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/ee7b60b6-6eed-473f-95f3-efe9e522aab3.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When user enter the valid accountNumber and Password
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">670 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/fa505420-4f90-48a0-a917-da8d6a4c18be.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And Click the Login button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">972 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/6d664c3d-8253-4a93-a5ae-4fe2e8bb2efe.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When User enter the valid pin and click on validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1745 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/5b3b3dde-915e-4df5-9126-eb9a3dcbc890.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User should navigate to Home Page
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">506 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/aa8fcea7-7d82-41a9-8b0a-387e2918528f.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User click on Fund Transfer Tab
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">550 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/0ac8302d-6d00-458a-804f-02694acb502c.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User inputs the fields rowQuery2 to complete the fund transfer
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">9260 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/6ec3d17e-6a48-48a4-b742-30a5b7b6c712.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User clicks the FundTransfer button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">2012 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/53f13438-d51d-4897-b4b4-bbe2a6f62e21.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And user enter authentication code as 123456 and click validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">2336 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/217aa757-5e2c-456b-a768-346e1a352c61.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User see success message and reference no will be generated
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1211 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/74e0d241-68ca-45e4-9a73-e73cadaf6ecc.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.afterScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">6636 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="fd1321e0-fc04-4e80-9656-50fc2cb9f5d8" tabindex="-1" role="dialog" aria-labelledby="fd1321e0-fc04-4e80-9656-50fc2cb9f5d8" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header text-white bg-dark">
+<span class="modal-title"><h5>To validate whether user see the successful transaction message and reference number generated</h5>
+<div class="font-italic text-muted">DemoBank.feature - line 20</div></span>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.beforeScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">0 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Given User login into Demo Bank site
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">2582 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/d5b4189f-06ff-4638-836f-feebc6f70d46.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When user enter the valid accountNumber and Password
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">658 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/8e48eaa1-4944-4d94-8242-abd9ba029d8c.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And Click the Login button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">955 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/0599ea0f-f893-4b0a-8e30-359389708857.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When User enter the valid pin and click on validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">10409 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/f5ed7035-d6cf-44f1-9d65-0150e80bbf37.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User should navigate to Home Page
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">539 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/aa8db28d-197c-4f50-b42d-d74b9f400b26.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User click on Fund Transfer Tab
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">585 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/c6a396db-17c5-4c11-9c55-95e526d1502c.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User inputs the fields rowQuery3 to complete the fund transfer
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">2844 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/ee865045-2c2b-4fb3-868d-5af895c97dd1.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User clicks the FundTransfer button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">3514 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/516ee91a-eec1-499a-a97e-2e659b8eb12e.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And user enter authentication code as 123456 and click validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1482 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/aaf75e7c-16cc-46a7-b31f-0a5d913f36f7.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User see success message and reference no will be generated
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">580 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/579260bb-cd9d-4490-9d67-fbe329992c65.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.afterScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">3534 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="ee389908-5b57-498d-a9f0-2a2393818ba0" tabindex="-1" role="dialog" aria-labelledby="ee389908-5b57-498d-a9f0-2a2393818ba0" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header text-white bg-dark">
+<span class="modal-title"><h5>To validate whether user see the successful transaction message and reference number generated</h5>
+<div class="font-italic text-muted">DemoBank.feature - line 21</div></span>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.beforeScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">0 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Given User login into Demo Bank site
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1773 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/26968bea-956e-4199-b040-2f7771c8d461.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When user enter the valid accountNumber and Password
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">819 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/02dd5925-08ee-4565-8749-29983279884b.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And Click the Login button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1193 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/40ccc1f2-6012-4876-9d7e-1640371023d3.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When User enter the valid pin and click on validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1725 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/5628812b-cc2b-4610-8521-39fb8ca8ea41.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User should navigate to Home Page
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">558 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/de774cdd-8da7-441d-b161-c5d0f68d1bec.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User click on Fund Transfer Tab
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">710 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/1cf31b1b-db43-47a4-a9ba-735ea1da6e9e.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User inputs the fields rowQuery4 to complete the fund transfer
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">4113 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/514589b8-6a26-4b63-bb3a-7b2f9d570d30.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User clicks the FundTransfer button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1144 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/a686359b-db08-453b-9a68-4ea78a719353.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And user enter authentication code as 123456 and click validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1152 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/fa2ed5db-3a33-45ea-9ebf-8d93d9e7ca9c.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User see success message and reference no will be generated
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">556 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/137c543a-0e17-4565-9fac-44d63658435a.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.afterScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">952 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="70292a30-fe22-4952-9033-a905c8f596e0" tabindex="-1" role="dialog" aria-labelledby="70292a30-fe22-4952-9033-a905c8f596e0" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header text-white bg-dark">
+<span class="modal-title"><h5>To validate whether user see the successful transaction message and reference number generated</h5>
+<div class="font-italic text-muted">DemoBank.feature - line 22</div></span>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.beforeScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">47 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Given User login into Demo Bank site
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">4115 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/5f9e58be-9d9c-4c00-923f-4d432c7a75d8.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When user enter the valid accountNumber and Password
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">665 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/62c8d521-4257-46bc-9244-16b0ae4dcfa4.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And Click the Login button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1082 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/d39026c4-20b5-4845-abe9-5c753c818ded.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When User enter the valid pin and click on validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1996 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/d4aaf808-2192-4682-ac14-f1c0936cc69e.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User should navigate to Home Page
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">543 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/ce2cdf8b-049f-431e-b2bd-662afed76862.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User click on Fund Transfer Tab
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">537 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/51289ec8-bf47-48ee-bcbf-e07fafa5c355.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User inputs the fields rowQuery5 to complete the fund transfer
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">3708 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/899a67b5-be7d-443b-b70a-d70b5d74cbd6.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User clicks the FundTransfer button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">3149 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/48966d1e-3e1b-4805-a407-bca9874d137a.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And user enter authentication code as 123456 and click validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1618 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/94379d49-41cc-4b4c-8801-aa2b90cac517.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User see success message and reference no will be generated
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">536 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/5f6ee361-8de4-41b5-b798-6c3bcf581201.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.afterScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">8706 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="4ae41385-5808-43fb-821d-7574df75fe9e" tabindex="-1" role="dialog" aria-labelledby="4ae41385-5808-43fb-821d-7574df75fe9e" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header text-white bg-dark">
+<span class="modal-title"><h5>To validate whether user see the successful transaction message and reference number generated</h5>
+<div class="font-italic text-muted">DemoBank.feature - line 18</div></span>
+<button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.beforeScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">0 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Given User login into Demo Bank site
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1938 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/9a3bd1e4-2722-49b6-9077-af0382fa8fa0.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When user enter the valid accountNumber and Password
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">866 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/0aa98e58-e47c-48d3-9100-f9610b373fee.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And Click the Login button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">938 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/162ae5bc-3e14-4a6c-9067-d69b887416cf.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+When User enter the valid pin and click on validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">4509 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/e76c6b59-e0f4-432a-ad83-a4555e8fa4b0.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User should navigate to Home Page
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">509 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/8d388891-5244-4185-ab62-d3a354cbfb38.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User click on Fund Transfer Tab
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">543 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/578cf3f4-b696-4005-85db-5d5b9ace83e5.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User inputs the fields rowQuery1 to complete the fund transfer
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">12174 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/94d56a29-6dc5-4b52-a14c-5728552897d3.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And User clicks the FundTransfer button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">5242 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/45de54da-8bd4-4edb-9465-cc1512a5b506.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+And user enter authentication code as 123456 and click validate button
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1666 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/d121d74e-8c6b-4e5d-b62f-a576417f46b5.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+Then User see success message and reference no will be generated
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">1054 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<div class="row mt-2">
+<div class="col-lg-12">
+<img src="images/46b8635f-9374-4b16-b548-76873ffade6d.png" class="img-thumbnail">
+</div>
+</div>
+<hr>
+<div class="row">
+<div class="col-lg-9" style="overflow-wrap:break-word;">
+stepDefinitions.Hooks.afterScenario(Scenario) in file:/E:/Automation%20Pack/AhilanC_IndividualTest_2/target/test-classes/
+</div>
+<div class="col-lg-3">
+<span class="float-right">
+<span class="badge badge-info">9966 ms</span>
+<span class="badge badge-success">Passed</span>
+</span>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+</div>
+
+
+</div>
+<!-- /.content-wrapper -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="js/jquery.easing.min.js"></script>
+<script src="js/jquery.dataTables.js"></script>
+<script src="js/dataTables.bootstrap4.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="js/core.min.js"></script>
+<script src="js/mdb.js"></script>
+<script src="js/Chart.min.js"></script>
+
+<script>
+    var passed = $('#card-passed').text();
+    var failed = $('#card-failed').text();
+    var rerun = $('#card-rerun').text();
+
+    var ctxP = document.getElementById("pieChart").getContext('2d');
+    var pieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+            labels: ["Passed", "Failed", "Re-run"],
+            datasets: [{
+                data: [passed, failed, rerun],
+                backgroundColor: ["#28a745", "#dc3545", "#ffbb33"]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+<script>
+    function setSearch(criteria) {
+        var search = "\"" + criteria + "\"";
+        if (criteria.length < 2) {
+            search = ''
+        }
+        $("input[type='search']").val(search).trigger($.Event("keyup", {keyCode: 13}));
+    }
+</script>
+
+</body>
+
+</html>
