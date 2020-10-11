@@ -38,14 +38,6 @@ public class FundTransferSteps implements En {
 			
 		});
 
-		Then("^User see the warning message when mandatory field is missing$", () -> {
-			Assert.assertTrue(fundTransferObjects.warningMsgAmt.isDisplayed());
-			Assert.assertTrue(fundTransferObjects.warningMsgFundTransferOpt.isDisplayed());
-			Assert.assertTrue(fundTransferObjects.warningMsgDOT.isDisplayed());
-			Assert.assertTrue(fundTransferObjects.warningMsgDesc.isDisplayed());
-			attachScreenshot();
-		});
-
 		Then("^User inputs the fields (.+) to complete the fund transfer$", (String rowQuery)-> {
 			try {
 				String ReceiverBankName = FileReaderHelper.getExcelFileHelper().getTestValue("ReceiverBankName", rowQuery);
@@ -101,22 +93,6 @@ public class FundTransferSteps implements En {
 			
 		});
 
-		Then("^user click Account Summary button$", ()-> {
-			attachScreenshot();
-			fundTransferObjects.accountSummaryMenu.click();
-		});
-
-		Then("^User see the account statement in account summary$", ()-> {
-			Assert.assertTrue(fundTransferObjects.accountStatementLabel.isDisplayed());
-			int acctRows = fundTransferObjects.accountSummaryTbl.size();
-			if(acctRows > 1) {
-				attachScreenshot();
-			} else {
-				Assert.fail("Account statement displayed is not successful");
-			}		
-		});
-
-		
 	}
 
 }
